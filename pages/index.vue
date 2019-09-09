@@ -6,17 +6,29 @@
 </template>
 
 <script>
-import ParkingLotStore from '~/store/parkingLotStore'
-import { get, sync, call } from 'vuex-pathify'
+import MyParkingLotStore from '~/store/reusable/parkingLotStore'
+import { get, sync, call, registerModule } from 'vuex-pathify'
+
+const members = function () {
+  return {
+    computed: {
+      parkingLot: sync('parks/theParkingLot/parkingLot')
+    },
+  }
+}
+
 export default {
   computed: {
     ...get('parks/*'),
     ...sync('parks/penguins@*'),
-    parkingLot: get('parks/parkingLot/parkingLot'),
+    // parkingLot: get('parks/parkingLot/parkingLot'),
     // parkingLot: sync('parks/parkingLot/parkingLot'), // doesn't work
   },
   beforeCreate() {
-    this.$store.registerModule('parks/parkingLot', ParkingLotStore)
+    // console.log('PARKING LOT STORE', MyParkingLotStore);
+    registerModule('parks/theParkingLot', MyParkingLotStore, members)
+
+    console.log('THIS IS MY STORE', this.$store);
   },
   created() {
   }
